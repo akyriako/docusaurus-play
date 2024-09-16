@@ -3,7 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'My PR Preview Site',
+  title: 'Docusaurus - Test PR Workflow',
   tagline: 'Dinosaurs are cool',
   favicon: 'img/favicon.ico',
 
