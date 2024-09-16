@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocusaurus_play=self.webpackChunkdocusaurus_play||[]).push([[760],{1776:e=>{e.exports=JSON.parse('{"metadata":{"permalink":"/docusaurus-play/pr-preview/-refs/pull/4/merge/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
