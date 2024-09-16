@@ -3,7 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'My Site',
+  title: 'Docusaurus - Test PR Workflow',
   tagline: 'Dinosaurs are cool',
   favicon: 'img/favicon.ico',
 
@@ -11,14 +11,14 @@ const config: Config = {
   url: 'https://akyriako.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/docusaurus-play/pr-preview/pr-2/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'akyriako', // Usually your GitHub org/user name.
   projectName: 'docusaurus-play', // Usually your repo name.
   trailingSlash: false,
-  
+
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
