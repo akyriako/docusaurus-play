@@ -23,7 +23,7 @@ jobs:
   automerge:
     runs-on: ubuntu-latest
     if: >
-        contains(github.event.pull_request.labels.*.name, 'gate')
+        contains(github.event.pull_request.labels.*.name, 'lgtm')
     permissions:
       contents: write
       pull-requests: write
