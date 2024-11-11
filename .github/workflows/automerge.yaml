@@ -28,10 +28,15 @@ jobs:
       contents: write
       pull-requests: write
     steps:
+      - name: Enforce LGTM Gate
+        uses: yogevbd/enforce-label-action@2.1.0
+        with:
+          REQUIRED_LABELS_ALL: "lgtm"
+
       - id: automerge
         name: automerge
         uses: "pascalgn/automerge-action@v0.16.4"
         env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GITHUB_TOKEN: "${{ github.token }}"
           MERGE_LABELS: "lgtm"
           MERGE_METHOD: "squash"
