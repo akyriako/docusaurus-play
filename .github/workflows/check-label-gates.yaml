@@ -1,4 +1,4 @@
-name: check-label-gates
+name: Check Label Gates
 
 on:
     pull_request:
@@ -9,10 +9,16 @@ on:
         - reopened
         - synchronize
         - edited
+    pull_request_review:
+      types:
+        - submitted
+    check_suite:
+      types:
+        - completed
 
 jobs:
     check-release-gates:
-      name: Check Release Gates
+      name: Check LGTM Gate
       runs-on: ubuntu-latest
   
       steps:
