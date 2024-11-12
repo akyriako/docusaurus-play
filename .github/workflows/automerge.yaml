@@ -12,7 +12,7 @@ on:
         - reopened
         - unlocked
     workflow_run:
-        workflows: ['Deploy Ephemeral Pull Request Environment']
+        workflows: ['Check Label Gates']
         types: [completed]
     pull_request_review:
       types:
