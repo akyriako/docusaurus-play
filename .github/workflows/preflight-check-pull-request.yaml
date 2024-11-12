@@ -2,7 +2,13 @@ name: Deploy Ephemeral Pull Request Environment
 
 on:
   pull_request:
-    branches: [ '*' ]
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+concurrency: preview-${{ github.ref }}
 
 jobs:
     preflight-check:
