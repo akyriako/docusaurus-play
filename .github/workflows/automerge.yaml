@@ -39,6 +39,7 @@ jobs:
           uses: rossjrw/pr-preview-action@v1
           with:
             source-dir: ./build/
+            action: remove
 
         - id: automerge-lgtm
           name: Automerge with main
