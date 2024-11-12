@@ -28,3 +28,22 @@ jobs:
           uses: yogevbd/enforce-label-action@2.1.0
           with:
             REQUIRED_LABELS_ALL: "lgtm"
+    
+    automerge:
+      name: Automatic Merging
+      runs-on: ubuntu-latest  
+      if: >
+        contains(github.event.pull_request.labels.*.name, 'lgtm')
+      permissions:
+        contents: write
+        pull-requests: write
+      needs: check-release-gates
+      
+      steps:
+        - id: automerge-lgtm
+          name: Automerge with main
+          uses: "pascalgn/automerge-action@v0.16.4"
+          env:
+            GITHUB_TOKEN: "${{ github.token }}"
+            MERGE_LABELS: "lgtm"
+            MERGE_METHOD: "squash"
