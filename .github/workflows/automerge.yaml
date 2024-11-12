@@ -1,4 +1,4 @@
-name: Automatic Merge
+name: Merge and Cleanup
 
 on:
   pull_request:
@@ -20,8 +20,8 @@ on:
   status: {}
 
 jobs:
-    automerge:
-      name: Merge if LGTM is present
+    housekeeping:
+      name: Housekeeping
       runs-on: ubuntu-latest
       if: >
         contains(github.event.pull_request.labels.*.name, 'lgtm')  
