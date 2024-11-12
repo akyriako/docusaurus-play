@@ -11,6 +11,9 @@ on:
         - ready_for_review
         - reopened
         - unlocked
+    workflow_run:
+        workflows: ['Check Label Gates']
+        types: [completed]
     # pull_request_review:
     #   types:
     #     - submitted
