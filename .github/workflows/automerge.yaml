@@ -20,8 +20,8 @@ on:
   status: {}
 
 jobs:
-    automerge:
-      name: Merge if LGTM is present
+    check-gates:
+      name: Check Gates
       runs-on: ubuntu-latest
       if: >
         contains(github.event.pull_request.labels.*.name, 'lgtm')  
@@ -35,6 +35,16 @@ jobs:
           with:
             REQUIRED_LABELS_ALL: "lgtm"
 
+    remove-artifacts:
+      name: Remove Artifacts
+      runs-on: ubuntu-latest
+      if: >
+        contains(github.event.pull_request.labels.*.name, 'lgtm')  
+      permissions:
+        contents: write
+        pull-requests: write
+
+      steps:
         - name: Checkout
           uses: actions/checkout@v4
 
@@ -45,12 +55,22 @@ jobs:
             npm install
             npm run build
 
-        - name: Remove Ephemeral Artifacts
+        - name: Remove Ephemeral Preview
           uses: rossjrw/pr-preview-action@v1
           with:
             source-dir: ./build/
             action: remove
 
+    auto-merge:
+      name: Automerge
+      runs-on: ubuntu-latest
+      if: >
+          contains(github.event.pull_request.labels.*.name, 'lgtm')  
+      permissions:
+        contents: write
+        pull-requests: write
+        
+      steps:
         - id: automerge-lgtm
           name: Automerge with main
           uses: "pascalgn/automerge-action@v0.16.4"
