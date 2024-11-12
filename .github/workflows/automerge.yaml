@@ -29,6 +29,11 @@ jobs:
         pull-requests: write
       
       steps:
+        - name: Check Required Labels
+          uses: yogevbd/enforce-label-action@2.1.0
+          with:
+            REQUIRED_LABELS_ALL: "lgtm"
+
         - id: automerge-lgtm
           name: Automerge with main
           uses: "pascalgn/automerge-action@v0.16.4"
