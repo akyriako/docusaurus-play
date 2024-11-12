@@ -35,6 +35,16 @@ jobs:
           with:
             REQUIRED_LABELS_ALL: "lgtm"
 
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        - name: Install and Build
+          env: 
+            REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}pr-${{ github.event.pull_request.number }}
+          run: |
+            npm install
+            npm run build
+
         - name: Remove Ephemeral Artifacts
           uses: rossjrw/pr-preview-action@v1
           with:
