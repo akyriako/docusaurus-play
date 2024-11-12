@@ -35,6 +35,11 @@ jobs:
           with:
             REQUIRED_LABELS_ALL: "lgtm"
 
+        - name: Remove Ephemeral Artifacts
+          uses: rossjrw/pr-preview-action@v1
+          with:
+            source-dir: ./build/
+
         - id: automerge-lgtm
           name: Automerge with main
           uses: "pascalgn/automerge-action@v0.16.4"
