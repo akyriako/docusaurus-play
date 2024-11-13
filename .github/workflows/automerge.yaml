@@ -73,6 +73,9 @@ jobs:
   automerge:
     name: Automerge Job
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     
     steps:
     - id: auto-merge
