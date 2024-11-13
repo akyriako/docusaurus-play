@@ -30,6 +30,10 @@ on:
       - unlabeled
       - ready_for_review
 
+  check_suite:
+    types:
+      - completed
+
   # Try enabling auto-merge for the specified pull request,
   # review or all open pull requests if none is specified.
 #   workflow_dispatch:
