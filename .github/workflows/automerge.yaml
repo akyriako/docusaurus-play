@@ -73,6 +73,9 @@ jobs:
   automerge:
     name: Automerge Job
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     
     steps:
     - id: auto-merge
@@ -82,6 +85,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_LABELS: "lgtm"
           MERGE_METHOD: "squash"
+          MERGE_ERROR_FAIL: true
 
 
     #   - id: dry-run
