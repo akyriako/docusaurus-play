@@ -7,8 +7,6 @@ on:
       - reopened
       - synchronize
 
-concurrency: preview-${{ github.ref }}
-
 jobs:
     preflight-checks:
       name: Run Preflight Checks 
