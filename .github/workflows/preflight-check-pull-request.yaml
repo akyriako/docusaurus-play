@@ -1,4 +1,4 @@
-name: Automatic PR Checks
+name: Automatic Pull Request Checks
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ concurrency: preview-${{ github.ref }}
 
 jobs:
     preflight-checks:
-      name: Preflight Checks 
+      name: Run Preflight Checks 
       environment: 
         name: preview
       runs-on: ubuntu-latest
