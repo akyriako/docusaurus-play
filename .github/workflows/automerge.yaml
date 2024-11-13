@@ -82,6 +82,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_LABELS: "lgtm"
           MERGE_METHOD: "squash"
+          MERGE_ERROR_FAIL: true
 
 
     #   - id: dry-run
