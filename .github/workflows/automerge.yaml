@@ -29,10 +29,11 @@ jobs:
           uses: yogevbd/enforce-label-action@2.1.0
           with:
             REQUIRED_LABELS_ALL: "lgtm"
-            
+
   automerge:
     name: Automerge Job
     runs-on: ubuntu-latest
+    needs: check-release-gates
     permissions:
       contents: write
       pull-requests: write
