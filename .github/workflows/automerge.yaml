@@ -45,8 +45,29 @@ on:
 #       review:
 #         description: Review ID
 #         required: false
-    workflow_run:
-        workflows: ['Check Label Gates']
+    
+
+# second
+    pull_request:
+        types:
+        - labeled
+        - unlabeled
+        - synchronize
+        - opened
+        - edited
+        - ready_for_review
+        - reopened
+        - unlocked
+    pull_request_review:
+        types:
+        - submitted
+    check_suite:
+        types:
+        - completed
+    status: {}
+
+    # workflow_run:
+    #     workflows: ['Check Label Gates']
 
 jobs:
   automerge:
@@ -54,25 +75,34 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - id: dry-run
-        name: Automerge Dry Run
-        uses: reitermarkus/automerge@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          merge-method: squash
-          do-not-merge-labels: never-merge
-          required-labels: lgtm
-          pull-request: ${{ github.event.inputs.pull-request }}
-          review: ${{ github.event.inputs.review }}
-          dry-run: true
+    - id: auto-merge
+      name: Merge with Target Branch
+      uses: pascalgn/automerge-action@v0.16.3
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_LABELS: "lgtm"
+          MERGE_METHOD: "squash"
 
-      - id: auto-merge
-        name: Merge with Target Branch
-        uses: reitermarkus/automerge@v2
-        with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            merge-method: squash
-            do-not-merge-labels: never-merge
-            required-labels: lgtm
-            pull-request: ${{ github.event.inputs.pull-request }}
-            review: ${{ github.event.inputs.review }}
+
+    #   - id: dry-run
+    #     name: Automerge Dry Run
+    #     uses: reitermarkus/automerge@v2
+    #     with:
+    #       token: ${{ secrets.GITHUB_TOKEN }}
+    #       merge-method: squash
+    #       do-not-merge-labels: never-merge
+    #       required-labels: lgtm
+    #       pull-request: ${{ github.event.inputs.pull-request }}
+    #       review: ${{ github.event.inputs.review }}
+    #       dry-run: true
+
+    #   - id: auto-merge
+    #     name: Merge with Target Branch
+    #     uses: reitermarkus/automerge@v2
+    #     with:
+    #         token: ${{ secrets.GITHUB_TOKEN }}
+    #         merge-method: squash
+    #         do-not-merge-labels: never-merge
+    #         required-labels: lgtm
+    #         pull-request: ${{ github.event.inputs.pull-request }}
+    #         review: ${{ github.event.inputs.review }}
