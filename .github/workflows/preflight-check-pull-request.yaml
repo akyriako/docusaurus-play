@@ -51,6 +51,9 @@ jobs:
           id: build_version_tag
           run: echo "image_version=${{ steps.date.outputs.today }}-${{github.run_number}}-${{ steps.commit_hash.outputs.short }}" >> $GITHUB_OUTPUT
 
+        - name: Show Version Tag
+          run: echo ${{ steps.build_version_tag.outputs.image_version }}
+
         - name: Build Static App
           env: 
             REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}
