@@ -39,6 +39,18 @@ jobs:
         #     cd src 
         #     npm run lint
 
+        - name: Get Commit Hash
+          id: commit_hash
+          uses: prompt/actions-commit-hash@v3
+
+        - name: Get Current Date
+          id: date
+          run: echo "::set-output name=today::$(date +'%Y%m%d')"
+
+        - name: Build Version Tag
+          id: build_version_tag
+          run: echo "image_version=${{ steps.date.outputs.today }}-${{github.run_number}}-${{ steps.commit_hash.outputs.short }}" >> $GITHUB_OUTPUT
+
         - name: Build Static App
           env: 
             REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}
