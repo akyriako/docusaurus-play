@@ -19,6 +19,13 @@ jobs:
       steps:
         - name: Checkout
           uses: actions/checkout@v4
+
+        - name: Build Version Tag
+          id: build_version_tag
+          run: echo "IMAGE_SEMVER=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+        - name: Show Version Tag
+          run: echo ${{ env.IMAGE_SEMVER }}
   
         - name: Setup NodeJS
           uses: actions/setup-node@v2
