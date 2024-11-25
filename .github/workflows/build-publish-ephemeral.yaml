@@ -22,7 +22,7 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v4
 
-        - name: Install and Build
+        - name: Build 
           if: github.event.action != 'closed' 
           env: 
             REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}pr-${{ github.event.pull_request.number }}
@@ -30,7 +30,15 @@ jobs:
             npm install
             npm run build
 
-        - name: Deploy or Remove
+        - name: Deploy
+          if: github.event.action != 'closed' 
+          uses: rossjrw/pr-preview-action@v1
+          with:
+            source-dir: ./build/
+            action: deploy
+        
+        - name: Remove
+          if: github.event.action == 'closed' 
           uses: rossjrw/pr-preview-action@v1
           with:
             source-dir: ./build/
