@@ -4,9 +4,10 @@ on:
     push:
       branches: 
         - main
-      # paths-ignore:
-      # - "**/README.md"
-      # - "**/.github/workflows/**"   
+      paths-ignore:
+      - "**/README.md"
+      - "**/.github/workflows/**"
+    workflow_dispatch:   
 
 jobs:
     build-preview:
@@ -14,6 +15,8 @@ jobs:
       environment: 
         name: preview
       runs-on: ubuntu-latest
+      outputs:
+        image_version: ${{ steps.build_image_tag.outputs.image_version }}
   
       steps:
         - name: Checkout
@@ -36,9 +39,13 @@ jobs:
           id: commit_hash
           uses: prompt/actions-commit-hash@v3
 
-        - name: Get Current Date
+        - name: Get Current Dateffff
           id: date
-          run: echo "::set-output name=today::$(date +'%Y%m%d')"
+          run: echo "today=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+
+        - name: Build Image Tag
+          id: build_image_tag
+          run: echo "image_version=${{ steps.date.outputs.today }}.${{github.run_number}}.0-${{ steps.commit_hash.outputs.short }}" >> $GITHUB_OUTPUT
 
         - name: Build Version Tag
           id: build_version_tag
@@ -50,11 +57,10 @@ jobs:
           with:
             # list of Docker images to use as base name for tags
             images: |
-              ${{ vars.REGISTRY }}/${{ vars.REGISTRY_ORG }}/docusaurus-play
+               ${{ vars.REGISTRY }}/ ${{ vars.REGISTRY_ORG }}/docusaurus-play
             # generate Docker tags based on the following events/attributes
             tags: |
-              type=raw,value=${{ steps.build_version_tag.outputs.image_version }}
-    
+              type=raw,value=${{ steps.build_version_tag.outputs.image_version }}    
         - name: Login to Container Registry
           uses: docker/login-action@v3
           with:
@@ -77,3 +83,37 @@ jobs:
             tags: ${{ steps.meta.outputs.tags }}
             labels: ${{ steps.meta.outputs.labels }}
             annotations: ${{ steps.meta.outputs.annotations }}
+
+    update-helm-charts:
+      needs: [build-preview]
+      environment: preview
+      runs-on: ubuntu-latest
+      permissions:
+        contents: write
+        pull-requests: write
+
+      steps:
+        - name: Checkout Charts Repo
+          uses: actions/checkout@v4
+          with: 
+            repository: "${{ vars.DOCS_NEXT_CHARTS_ORG }}/${{ vars.DOCS_NEXT_CHARTS_REPO }}"
+            token: ${{ secrets.GITHUB_TOKEN }}
+        - name: Commit Changes
+          env:
+            image: ${{ vars.REGISTRY }}/${{ vars.REGISTRY_ORG }}/${{ vars.IMG_NAME }}
+            tag: ${{ needs.build-preview.outputs.image_version }}
+          run: |
+            git config --global user.name 'github-actions[bot]'
+            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+            sed -i 's/^tag: .*/tag: ${{ env.tag }}/' ./charts/docusaurus/values-stg.yaml
+            sed -i 's/^image: .*/image: ${{ env.image }}/' ./charts/docusaurus/values-stg.yaml
+            git commit -am "Automatic commit from GitHub Actions triggered by action #${{github.run_number}}"
+        - name: Create Pull Request
+          uses: peter-evans/create-pull-request@v7
+          env:
+            remote_pr_branch: 'release/staging-${{ needs.build-preview.outputs.image_version }}'
+          with:
+            title: ${{ env.remote_pr_branch }}
+            token: ${{ secrets.GITHUB_TOKEN }}
+            branch: ${{ env.remote_pr_branch }}
+          

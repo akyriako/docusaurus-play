@@ -1,0 +1,37 @@
+name: Build and Deploy Pull Request Preview
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+concurrency: preview-${{ github.ref }}
+
+jobs:
+    deploy-ephemeral-preview:
+      name: Deploy Ephemeral Preview 
+      environment: 
+        name: pull-requests-preview
+        url: 'https://${{ github.repository_owner }}.github.io${{ vars.DOCUSAURUS_BASE_URL }}pr-${{ github.event.pull_request.number }}'
+      runs-on: ubuntu-20.04
+
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        - name: Install and Build
+          if: github.event.action != 'closed' 
+          env: 
+            REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}pr-${{ github.event.pull_request.number }}
+          run: |
+            npm install
+            npm run build
+
+        - name: Deploy
+          uses: rossjrw/pr-preview-action@v1
+          with:
+            source-dir: ./build/
+            action: deploy
