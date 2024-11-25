@@ -39,7 +39,7 @@ jobs:
           id: commit_hash
           uses: prompt/actions-commit-hash@v3
 
-        - name: Get Current Date
+        - name: Get Current Dateffff
           id: date
           run: echo "today=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
 
